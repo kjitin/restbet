@@ -32,7 +32,7 @@ public class BetControllerTest {
 	@Test
 	public void getBetsFromService() throws Exception{
 		
-		 mockMvc.perform(MockMvcRequestBuilders.get("/available")).andExpect(MockMvcResultMatchers.status().isOk())
+		 mockMvc.perform(MockMvcRequestBuilders.get("/v1/available")).andExpect(MockMvcResultMatchers.status().isOk())
 		 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
 		 .andExpect(MockMvcResultMatchers.jsonPath("$[0].bet_id",is(1)));
 		 
@@ -41,9 +41,9 @@ public class BetControllerTest {
 	@Test
 	public void postBetsToService() throws Exception{
 		
-		 mockMvc.perform(MockMvcRequestBuilders.post("/bets").contentType(MediaType.APPLICATION_JSON)
+		 mockMvc.perform(MockMvcRequestBuilders.post("/v1/bets").contentType(MediaType.APPLICATION_JSON)
 				 .content("{\"bet_id\":1,\"odds\":11.0,\"stake\":10}\")"))
-				 .andExpect(MockMvcResultMatchers.status().isCreated())
+				 .andExpect(MockMvcResultMatchers.status().isOk())
 				 .andExpect(MockMvcResultMatchers.jsonPath("$.bet_id",is(1)));
 		 
 	}
@@ -51,7 +51,7 @@ public class BetControllerTest {
 	@Test
 	public void postBetsToServiceWithWrongBetId() throws Exception{
 		
-		 mockMvc.perform(MockMvcRequestBuilders.post("/bets").contentType(MediaType.APPLICATION_JSON)
+		 mockMvc.perform(MockMvcRequestBuilders.post("/v1/bets").contentType(MediaType.APPLICATION_JSON)
 				 .content("{\"bet_id\":10002,\"odds\":11.0,\"stake\":10}\")"))
 				 .andExpect(MockMvcResultMatchers.status().isIAmATeapot());
 		 
@@ -60,7 +60,7 @@ public class BetControllerTest {
 	@Test
 	public void postBetsToServiceWithBetId0() throws Exception{
 		
-		 mockMvc.perform(MockMvcRequestBuilders.post("/bets").contentType(MediaType.APPLICATION_JSON)
+		 mockMvc.perform(MockMvcRequestBuilders.post("/v1/bets").contentType(MediaType.APPLICATION_JSON)
 				 .content("{\"bet_id\":0,\"odds\":11.0,\"stake\":10}\")"))
 				 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 		 
@@ -69,7 +69,7 @@ public class BetControllerTest {
 	@Test
 	public void postBetsToServiceWithIncorrectJSON() throws Exception{
 		
-		 mockMvc.perform(MockMvcRequestBuilders.post("/bets").contentType(MediaType.APPLICATION_JSON)
+		 mockMvc.perform(MockMvcRequestBuilders.post("/v1/bets").contentType(MediaType.APPLICATION_JSON)
 				 .content("{\"odds\":11.0,\"stake\":10}\")"))
 				 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 		 
@@ -78,7 +78,7 @@ public class BetControllerTest {
 	@Test
 	public void postBetsToServiceWithInValidJSON() throws Exception{
 		
-		 mockMvc.perform(MockMvcRequestBuilders.post("/bets").contentType(MediaType.APPLICATION_JSON)
+		 mockMvc.perform(MockMvcRequestBuilders.post("/v1/bets").contentType(MediaType.APPLICATION_JSON)
 				 .content("{\"odds\"11.0,\"stake\":10}\")"))
 				 .andExpect(MockMvcResultMatchers.status().isBadRequest());
 		 

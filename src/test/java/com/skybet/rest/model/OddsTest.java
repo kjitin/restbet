@@ -23,11 +23,10 @@ public class OddsTest {
     @Test
     public void testSerialization() throws IOException {
         Odds odds = new Odds();
-        odds.setOdds(2.0);
         odds.setNumerator(1);
         odds.setDenominator(2);
 
         assertThat(this.json.write(odds))
-                .extractingJsonPathValue("@.odds").isEqualTo(2.0);
+                .extractingJsonPathValue("@.numerator").isEqualTo(1);
     }
 }

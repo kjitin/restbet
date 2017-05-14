@@ -35,7 +35,7 @@ public class BetController {
 	 * Used to get all Available bets
 	 * @return List<DecimalBets>
 	 */
-	@RequestMapping(value="/available",method=RequestMethod.GET)
+	@RequestMapping(value="/v1/available",method=RequestMethod.GET)
 	public List<DecimalBets> getAvailableBets(){
 		RestTemplate restTemplate = new RestTemplate();
 		FractionBets[] bets =restTemplate.getForObject(env.getProperty("location.available"), FractionBets[].class);
@@ -51,15 +51,16 @@ public class BetController {
 	 * @param inputBets
 	 * @return Created DecimalBets
 	 */
-	@RequestMapping(value="/bets",method=RequestMethod.POST,consumes="application/json")
-	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(value="/v1/bets",method=RequestMethod.POST,consumes="application/json")
 	public DecimalBets postBets(@RequestBody @Valid InputBets inputBets){
 		RestTemplate restTemplate = new RestTemplate();
+
 		
 		PostBets postBets =convertInputToPost.apply(inputBets);
 
 
 		ResponseEntity<FractionBets> responseBets;
+
 		try{
 		responseBets =restTemplate.exchange(env.getProperty("location.bets"),HttpMethod.POST, getPostBetsHttpEntity(postBets), FractionBets.class);
 		}
@@ -123,8 +124,8 @@ public class BetController {
 	 * @return Decimal Value
 	 */
 	public Double getDecimalValue(int numerator, int denominator) {
-		DecimalFormat twoDForm = new DecimalFormat("#.##");
-		Double result = Fraction.getFraction(numerator, denominator).doubleValue()+1;
+		DecimalFormat twoDForm = new DecimalFormat("##.##");
+		Double result = Fraction.getFraction(numerator, denominator).doubleValue()+1.0;
 		return Double.valueOf(twoDForm.format(result));
 	}
 	
